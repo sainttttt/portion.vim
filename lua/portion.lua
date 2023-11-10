@@ -1,5 +1,5 @@
 -- main module file
-local module = require("portion.module")
+-- local module = require("portion.module")
 
 local lastWinId = -1
 local curWinId = -1
@@ -16,7 +16,7 @@ end
 ---@class Config
 ---@field opt string Your config option
 local config = {
-  -- opt = "Hello!",
+  ratio = 0.4
 }
 
 ---@class MyModule
@@ -48,7 +48,7 @@ M.portion = function()
   local width = vim.o.columns
   local numVisWins = #visibleWinIds
   local lastWinMult = 0.1 * numVisWins * numVisWins * 0.1
-  local curWinMult = 0.3 * numVisWins * numVisWins * 0.1
+  local curWinMult = M.config.ratio * numVisWins * numVisWins * 0.1
   -- print (numVisWins)
   local loss = 1
   if numVisWins > 2 then
@@ -81,8 +81,7 @@ M.portion = function()
   disableTrack = false
 end
 
-
-M.portionSetup() = function()
+M.portionSetup = function()
   vim.api.nvim_create_autocmd('WinEnter', {
     desc = 'tracking portion',
 
@@ -104,7 +103,7 @@ M.portionSetup() = function()
         curWinId = getCurWinId()
       end
 
-      portion()
+      M.portion()
     end,
   })
 end
